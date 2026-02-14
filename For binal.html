@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Be My Valentine?</title>
+    <title>For My Valentine</title>
     <style>
         body {
             margin: 0;
@@ -12,143 +12,147 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #ffebee;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fff0f3;
+            font-family: 'Georgia', serif;
             overflow: hidden;
             text-align: center;
         }
 
         .container {
-            background-color: white;
-            padding: 3rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(255, 77, 109, 0.2);
-            border: 2px solid #ff4d6d;
-            position: relative;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 50px;
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(255, 77, 109, 0.2);
             z-index: 10;
+            width: 350px;
+            position: relative;
         }
 
         h1 {
             color: #ff4d6d;
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            transition: 0.3s;
         }
 
-        .buttons {
+        .btn-wrapper {
             display: flex;
             justify-content: center;
             gap: 20px;
-            align-items: center;
             height: 50px;
         }
 
         button {
             padding: 12px 25px;
-            font-size: 1.2rem;
-            font-weight: bold;
+            font-size: 1.1rem;
             border: none;
-            border-radius: 10px;
+            border-radius: 25px;
             cursor: pointer;
-            transition: transform 0.2s;
+            font-weight: bold;
         }
 
+        /* Clickable Yes Button */
         #yesBtn {
             background-color: #ff4d6d;
             color: white;
+            transition: transform 0.2s;
         }
 
         #yesBtn:hover {
             transform: scale(1.1);
-            background-color: #ff758f;
         }
 
+        /* Unclickable No Button */
         #noBtn {
-            background-color: #8a8a8a;
+            background-color: #ffb3c1;
             color: white;
-            position: absolute;
+            position: fixed; /* Allows it to jump around the whole screen */
+            transition: 0.1s ease;
+            z-index: 1000;
         }
 
-        #message {
+        /* The Message that appears after clicking Yes */
+        #success-message {
             display: none;
-            color: #ff4d6d;
-            font-size: 2rem;
+            color: #c9184a;
+            font-size: 2.5rem;
             font-weight: bold;
-            animation: heartBeat 1.5s infinite;
+            animation: heartbeat 1.2s infinite;
         }
 
-        /* Floating Hearts Animation */
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
         .heart {
             position: absolute;
             color: #ff4d6d;
-            font-size: 20px;
-            user-select: none;
+            animation: floatUp 4s linear forwards;
             pointer-events: none;
-            animation: float 4s linear forwards;
         }
 
-        @keyframes float {
+        @keyframes floatUp {
             0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
             100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
-        }
-
-        @keyframes heartBeat {
-            0% { transform: scale(1); }
-            14% { transform: scale(1.1); }
-            28% { transform: scale(1); }
-            42% { transform: scale(1.1); }
-            70% { transform: scale(1); }
         }
     </style>
 </head>
 <body>
 
-    <div class="container" id="mainContainer">
-        <div id="quizContent">
+    <div class="container" id="mainBox">
+        <div id="content">
             <h1>Will you be my Valentine? ❤️</h1>
-            <div class="buttons">
-                <button id="yesBtn" onclick="showSuccess()">Yes</button>
-                <button id="noBtn" onmouseover="moveButton()" onclick="moveButton()">No</button>
+            <div class="btn-wrapper">
+                <button id="yesBtn" onclick="handleYesClick()">Yes</button>
+                <button id="noBtn" onmouseover="moveNo()">No</button>
             </div>
         </div>
-        <div id="message">Thank you love! 💖</div>
+        <div id="success-message">Binal said Yash</div>
     </div>
 
     <script>
-        // Move the "No" button away from the cursor
-        function moveButton() {
+        // Makes the No button jump away when hovered
+        function moveNo() {
             const btn = document.getElementById('noBtn');
             const x = Math.random() * (window.innerWidth - btn.offsetWidth);
             const y = Math.random() * (window.innerHeight - btn.offsetHeight);
-            
             btn.style.left = x + 'px';
             btn.style.top = y + 'px';
         }
 
-        // Show the success message and start heart rain
-        function showSuccess() {
-            document.getElementById('quizContent').style.display = 'none';
-            document.getElementById('message').style.display = 'block';
-            setInterval(createHeart, 300);
+        // Logic for when Binal clicks Yes
+        function handleYesClick() {
+            // Hide the question and buttons
+            document.getElementById('content').style.display = 'none';
+            document.getElementById('noBtn').style.display = 'none';
+            
+            // Show the romantic message
+            const msg = document.getElementById('success-message');
+            msg.style.display = 'block';
+
+            // Create a burst of celebration hearts
+            for(let i=0; i<50; i++) {
+                setTimeout(createHeart, i * 30);
+            }
         }
 
-        // Create decorative floating hearts
+        // Background floating hearts
         function createHeart() {
             const heart = document.createElement('div');
-            heart.classList.add('heart');
+            heart.className = 'heart';
             heart.innerHTML = '❤️';
             heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+            heart.style.animationDuration = (Math.random() * 2 + 2) + 's';
             document.body.appendChild(heart);
 
-            setTimeout(() => {
-                heart.remove();
-            }, 5000);
+            setTimeout(() => { heart.remove(); }, 4000);
         }
 
-        // Initialize some hearts on load
-        for(let i=0; i<10; i++) {
-            setTimeout(createHeart, i * 500);
-        }
+        // Continuously generate small background hearts
+        setInterval(createHeart, 400);
     </script>
 </body>
 </html>
